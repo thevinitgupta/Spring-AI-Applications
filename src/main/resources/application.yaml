@@ -1,3 +1,23 @@
+
 spring:
   application:
     name: genai-java-spring
+  ai:
+    openai:
+      api-key: ${OPEN_AI_API_KEY}
+      base-url: https://openrouter.ai/api
+      chat:
+        options:
+          model: gpt-4o
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3:0.6b
+server:
+  port: 8081
+logging:
+  level:
+    root: info
+    com.genai.java.spring : info
+    org.springframework.ai : info
+
