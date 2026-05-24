@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: genai-java-spring
@@ -13,11 +12,24 @@ spring:
       base-url: http://localhost:11434
       chat:
         model: qwen3:0.6b
+    google:
+      genai:
+        project-id: ${GOOGLE_PROJECT_ID}
+        api-key: ${GEMINI_API_KEY}
+        chat:
+          options:
+            model: gemini-2.0-flash-lite
 server:
   port: 8081
 logging:
   level:
     root: info
-    com.genai.java.spring : info
-    org.springframework.ai : info
+    com.genai.java.spring: info
+    org.springframework.ai: info
+
+kind: Application
+
+app:
+  ai:
+    provider: ollama # gemini or openai or ollama
 
