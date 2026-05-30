@@ -3,11 +3,11 @@ spring:
     name: genai-java-spring
   ai:
     openai:
-      api-key: ${OPEN_AI_API_KEY}
-      base-url: https://openrouter.ai/api
+      api-key: ${HUGGING_FACE_API_KEY} # ${OPEN_AI_API_KEY}
+      base-url: https://router.huggingface.co # https://openrouter.ai/api
       chat:
         options:
-          model: gpt-4o
+          model: Qwen/Qwen2.5-7B-Instruct:together # gpt-4o
     ollama:
       base-url: http://localhost:11434
       chat:
