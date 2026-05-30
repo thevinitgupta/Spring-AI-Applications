@@ -21,7 +21,7 @@ public class OpenAIChatController {
     private final ChatClient chatClient;
 
     // using ollama chat client as backup for OpenAIChat
-    public OpenAIChatController(ChatClient chatClient) {
+    public OpenAIChatController(@Qualifier("ollamaChatClient") ChatClient chatClient) {
         this.chatClient = chatClient;
     }
 
