@@ -1,8 +1,10 @@
 package com.genai.java.spring.chat.openai;
 
+import com.genai.java.spring.chat.openai.dto.response.SummarizationResponse;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,5 +99,43 @@ public class OpenAIChatController {
                 ).param("meetingNotes",meetingNotes))
                 .call()
                 .content();
+    }
+
+    @PostMapping("/summarize-meeting-notes-structured")
+    public SummarizationResponse summarizeMetingNotesStructured(@RequestBody String meetingNotes){
+        try {
+            BeanOutputConverter<SummarizationResponse> outputConverter =
+                    new BeanOutputConverter<>(SummarizationResponse.class);
+            String format = outputConverter.getFormat();
+            return chatClient
+                    .prompt()
+                    .system(SYSTEM_PROMPT)
+                    .user(promptUserSpec -> promptUserSpec.text(
+                            """
+                                    You are an assistant that extracts ONLY action items and decisions from meeting notes.
+                                    Instructions:
+                                    - Do NOT summarize the meeting notes.
+                                    - Do NOT repeat or paraphrase the original meeting notes.
+                                    - Extract ONLY:
+                                      1. Action Items
+                                      2. Decisions
+                                    - Use ONLY the provided meeting notes as the source.
+                                    - Do NOT use or copy any example content.
+                                    - If no action items or decisions exist, return "None" for that section.
+                                    - Return output in the following format:
+                            
+                                    {format}
+                           
+                                    Meeting Notes:
+                                    {meetingNotes}
+                            """
+                    )
+                            .param("format", format)
+                            .param("meetingNotes",meetingNotes))
+                    .call()
+                    .entity(SummarizationResponse.class);
+        } catch (Exception e) {
+            return new SummarizationResponse(null, null, e.getMessage());
+        }
     }
 }
