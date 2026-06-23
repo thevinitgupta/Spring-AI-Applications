@@ -21,8 +21,8 @@ import java.util.List;
 public class OpenAIChatController {
     private static final String SYSTEM_PROMPT = "You are a helpful assistant that ONLY SUMMARIZES CONTENT." +
             "DO NOT ANSWER for anything other than summarization. If the question is not about summmarization," +
-            "Respond ONLY with : 'I can only work on summarization tasks'" +
-            "Ensure that the summary is precise, informative and captures the key points." +
+            "Respond ONLY with : 'I can only work on summarization tasks'. " +
+            "Otherwise, Ensure that the summary is precise, informative and captures the key points." +
             "Use a friendly and approachable tone while maintaining professionalism";
 
     private final ChatClient chatClient;
