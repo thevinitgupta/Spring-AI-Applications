@@ -1,5 +1,6 @@
 package com.genai.java.spring.configs;
 
+import com.genai.java.spring.chat.advisor.ErrorWrappingAdvisor;
 import org.apache.commons.logging.impl.SimpleLog;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
@@ -39,10 +40,11 @@ public class AIProviderConfig {
     @Bean("ollamaChatClient")
     ChatClient ollamaChatClient(OllamaChatModel ollamaChatModel,
                                 SimpleLoggerAdvisor simpleLoggerAdvisor,
-                                SafeGuardAdvisor safeGuardAdvisor){
+                                SafeGuardAdvisor safeGuardAdvisor,
+                                ErrorWrappingAdvisor errorWrappingAdvisor){
         return ChatClient
                 .builder(ollamaChatModel)
-                .defaultAdvisors(safeGuardAdvisor, simpleLoggerAdvisor) // since both have default order=0, the parameter order will be used here. If safeguard advisor is second, the short circuit functionality will prevent logging if safe guard blocks the request
+                .defaultAdvisors(safeGuardAdvisor, simpleLoggerAdvisor, errorWrappingAdvisor) // since both have default order=0, the parameter order will be used here. If safeguard advisor is second, the short circuit functionality will prevent logging if safeguard blocks the request
                 .build();
     }
 
@@ -69,7 +71,7 @@ public class AIProviderConfig {
 
     @Bean
     SafeGuardAdvisor safeGuardAdvisor(){
-        return new SafeGuardAdvisor(List.of("suggest", "provide", "give", "death", "poison"));
+        return new SafeGuardAdvisor(List.of("death", "poison", "system prompt", "hack"));
     }
 
 

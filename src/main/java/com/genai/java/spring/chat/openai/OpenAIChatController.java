@@ -109,28 +109,20 @@ public class OpenAIChatController {
             String format = outputConverter.getFormat();
             return chatClient
                     .prompt()
-                    .system(SYSTEM_PROMPT)
                     .user(promptUserSpec -> promptUserSpec.text(
                             """
-                                    You are an assistant that extracts ONLY action items and decisions from meeting notes.
-                                    Instructions:
-                                    - Do NOT summarize the meeting notes.
-                                    - Do NOT repeat or paraphrase the original meeting notes.
-                                    - Extract ONLY:
-                                      1. Action Items
-                                      2. Decisions
-                                    - Use ONLY the provided meeting notes as the source.
-                                    - Do NOT use or copy any example content.
-                                    - If no action items or decisions exist, return "None" for that section.
-                                    - Return output in the following format:
-                            
-                                    {format}
-                           
-                                    Meeting Notes:
-                                    {meetingNotes}
-                            """
+                                    Extract ONLY action items and decisions from the following meeting notes.
+
+                    Rules:
+                    - Do NOT summarize.
+                    - Do NOT repeat the notes.
+                    - Extract ONLY action items and decisions.
+                    - If none exist, return empty arrays.
+
+                    Meeting Notes:
+                    {meetingNotes}
+                    """
                     )
-                            .param("format", format)
                             .param("meetingNotes",meetingNotes))
                     .call()
                     .entity(SummarizationResponse.class);
